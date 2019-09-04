@@ -53,7 +53,7 @@ def process(event):
     s3.download_file(bkt_in_name, key, infile)
 
     if not os.path.isfile(infile):
-        raise Exception('Could not download {} from {} to {}'.format(key, bkt_in_name, infile)
+        raise Exception('Could not download {} from {} to {}'.format(key, bkt_in_name, infile))
 
     decimate(infile, outfile, dec_factor)
 
