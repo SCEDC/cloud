@@ -43,7 +43,8 @@ def process(event):
     dec_factor = event['decimation_factor']
     print('input bucket:{} output bucket:{} decimation:{}'.format(bkt_in_name, bkt_out_name, dec_factor))
     (year, year_day, filename) = key.split('/')
-    
+    (fn, ext) = os.path.splitext(filename)
+
     session = boto3.Session()
     s3 = boto3.client('s3', region_name='us-west-2')
 
