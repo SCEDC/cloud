@@ -2,7 +2,7 @@ The scedc-lambda project is an example Lambda function that uses ObsPy to
 decimate seismograms from the SCEDC Open Data Set by a factor of four and 
 writes the output to another S3 bucket in the user's own account.
 
-* Prerequisites *
+**Prerequisites**
 
 - Your own AWS account
 - Docker
@@ -10,7 +10,7 @@ writes the output to another S3 bucket in the user's own account.
 - boto3 module for Python
 - awscli module for Python
 
-* AWS Setup *
+**AWS Setup**
 
 In your AWS account:
 
@@ -23,7 +23,7 @@ decimated data.
 On your computer make sure you have AWS programmatic access keys that have
 full Lambda permissions.
 
-* Creating the Lambda Function *
+**Creating the Lambda Function**
 
 1. Run this command:
   docker build -t lambda-env .
@@ -70,7 +70,7 @@ The list should contain the full path of each seismogram, one per line. Below is
 
 You can generate listings by using the "aws s3 ls" command.
 
-* Updating the Lambda Function *
+**Updating the Lambda Function**
 
 If you need to modify the Lambda function, make your changes in process.py and replace
 process.py in the zip file by running:
