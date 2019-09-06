@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Generate key listing for seismograms in the SCEDC Open Data Set 
+# given year, day range, and SEED channel.
+
+year=2016
+for d in {1..31}; do
+  prefix=$(printf "%d/%d_%03d" $year $year $d)
+  aws s3 ls s3://scedc-pds/${prefix} --recursive | awk '{print $4}' | grep _BH
+done
+  
