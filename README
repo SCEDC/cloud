@@ -43,6 +43,7 @@ if you're using the SCEDC Open Data Set. NCORES should be set to the number of
 CPU cores you want to use on your computer when calling the lambda function.
 
 3. Upload venv.zip to the S3 bucket defined in LAMBDA_BUCKET in settings.py.
+  aws s3 cp venv.zip s3://my-lambda-env-bucket/
 
 4. Run:
   python create_lambda_function.py
@@ -68,3 +69,16 @@ The list should contain the full path of each seismogram, one per line. Below is
 2016/2016_001/AZCPE__BHE___2016001.ms
 
 You can generate listings by using the "aws s3 ls" command.
+
+* Updating the Lambda Function *
+
+If you need to modify the Lambda function, make your changes in process.py and replace
+process.py in the zip file by running:
+  zip -r venv.zip process.py
+This only replaces process.py, so you don't need to re-run the docker command to
+create a new zip file. 
+
+Then run:
+  python update_lambda_function.py
+which will automatically upload the new version of venv.zip and reload the Lambda
+function.
