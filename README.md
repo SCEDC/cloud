@@ -54,7 +54,7 @@ to create the Lambda function.
 to call the lambda function on one seismogram. You should see the decimated
 file appear in your output S3 bucket as decimated/2016/2016_123/CIWCS2_BHE___2016123.ms.
 
-* Running Decimation *
+**Running Decimation**
 
 decimate.py will call the Lambda function on a list of seismograms by key. Set the 
 values of NCORES in settings.py to how many local CPU cores you want to use for
