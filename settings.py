@@ -1,5 +1,8 @@
 """
 Settings for maintaining and running an AWS Lambda function.
+
+author: Shang-Lin Chen
+
 """
 
 AWS_PROFILE = 'schen-gps'           # Profile in .aws/credentials

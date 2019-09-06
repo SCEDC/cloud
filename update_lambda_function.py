@@ -1,3 +1,10 @@
+"""
+Upload lambda zip file and reload lambda function.
+
+author: Shang-Lin Chen
+
+"""
+
 # In this example, we have a file named `credentials` in a `.aws` directory.
 # e.g.:
 # $ cat ~/.aws/credentials

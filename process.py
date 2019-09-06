@@ -1,6 +1,9 @@
 """
 Lambda function that decimates a miniSEED seismogram from
 one S3 bucket and uploads the result to another S3 bucket.
+
+author: Shang-Lin Chen
+
 """
 
 import os
@@ -19,14 +22,13 @@ def decimate(infile, outfile, dec_factor):
     :param dec_factor: Decimation factor
     """
     st = obspy.read(infile)
-    st_new = Stream()
+    #st_new = Stream()
     # Decimate each trace in the stream.
     for tr in st:
-        tr.decimate(factor=dec_factor, strict_length=False)
-        st_new.append(tr)
-    print(outfile)
+        tr.decimate(factor=dec_factor, strict_length=False, no_filter=True)
+        #st_new.append(tr)
     # Write the resulting stream to disk.
-    st_new.write(outfile, format='MSEED')
+    st.write(outfile, format='MSEED')
 
 
 def process(event):
@@ -70,8 +72,4 @@ def process(event):
 def handler(event, context):
     """ Lambda function handler.
     """
-    try:
-        process(event)
-    except Exception as error:
-        print(error)
-        return {'message': str(error)}
+    process(event)
