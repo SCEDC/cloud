@@ -31,7 +31,9 @@ to create a Docker image called lambda-env that runs
 amazonlinux:2018.03 and has Python 3.7 installed.
 
 2. Run this command:
-  docker run -v $(pwd):/outputs lambda-env /bin/bash /outputs/build.sh
+```
+docker run -v $(pwd):/outputs lambda-env /bin/bash /outputs/build.sh
+```
 to create a zip file named venv.zip. The script build.sh installs numpy and Obspy
 in a virtual environment in a Docker container and zips the virtual environment
 along with process.py, which contains the lambda function.
@@ -46,11 +48,15 @@ CPU cores you want to use on your computer when calling the lambda function.
   aws s3 cp venv.zip s3://my-lambda-env-bucket/
 
 4. Run:
-  python create_lambda_function.py
+```
+python create_lambda_function.py
+```
 to create the Lambda function.
 
 5. Run:
+```
   python run_lambda.py
+```
 to call the lambda function on one seismogram. You should see the decimated
 file appear in your output S3 bucket as decimated/2016/2016_123/CIWCS2_BHE___2016123.ms.
 
@@ -63,10 +69,12 @@ sending Lambda function calls, and run:
 
 The list should contain the full path of each seismogram, one per line. Below is a sample listing:
 
+```
 2016/2016_001/AZBZN__BHE___2016001.ms
 2016/2016_001/AZBZN__BHN___2016001.ms
 2016/2016_001/AZBZN__BHZ___2016001.ms
 2016/2016_001/AZCPE__BHE___2016001.ms
+```
 
 You can generate listings by using the "aws s3 ls" command.
 
@@ -74,11 +82,15 @@ You can generate listings by using the "aws s3 ls" command.
 
 If you need to modify the Lambda function, make your changes in process.py and replace
 process.py in the zip file by running:
-  zip -r venv.zip process.py
+```
+zip -r venv.zip process.py
+```
 This only replaces process.py, so you don't need to re-run the docker command to
 create a new zip file. 
 
 Then run:
-  python update_lambda_function.py
+```
+python update_lambda_function.py
+```
 which will automatically upload the new version of venv.zip and reload the Lambda
 function.
