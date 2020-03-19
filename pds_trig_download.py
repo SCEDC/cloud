@@ -30,7 +30,9 @@ def get_events(year, month, mag):
     catalog_file = '{}.catalog.csv'.format(year)
     print(catalog_file)
     s3cli.download_file('scedc-pds', 'earthquake_catalogs/index/csv/year={}/{}'.format(year, catalog_file), catalog_file)
-    catalog = pd.read_csv(catalog_file, index_col=False)
+    #catalog = pd.read_csv(catalog_file, index_col=False)
+    catalog = pd.read_csv(catalog_file)
+
     # Convert eventdate column from string to Timestamp.
     catalog['eventdate'] = pd.to_datetime(catalog['YYYY/MM/DD'])
     # Get the events that meet the criteria.
