@@ -64,6 +64,13 @@ python3 fetch_continuous_data.py --infile avail.txt --outdir /tmp
 python3fetch_continuous_data.py --infile avail.txt --outdir s3://mybucket/myfolder/
 ```
   
+## Output  
+
+The outputs are  
+  * A set of miniSEED files satisfying the input requests. All downloaded files are a day long.
+  * A text file named *scedc-pds-files.txt* containing the pds location of downloaded files.
+  
+  
 
  
 
