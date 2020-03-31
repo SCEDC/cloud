@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-This code downloads event waveforms from the SCEDC Open Data Set for events that occurred 
+This code downloads phase picks from the SCEDC Open Data Set for events that occurred 
 in a particular year and month and exceed a certain magnitude.
 """
 
@@ -19,7 +19,7 @@ def get_prefix(event_time):
     """ Creates the Open Data Set prefix for an event given the origin time
     as a Pandas timestamp.
     """
-    return 'event_waveforms/{}/{}_{}/'.format(event_time.year, event_time.year, event_time.dayofyear)
+    return 'event_phases/{}/{}_{}/'.format(event_time.year, event_time.year, event_time.dayofyear)
 
 
 def get_events(year, month, mag):
@@ -67,7 +67,7 @@ def list_objects(evid, prefix):
             
     return obj_names
 
-def download_events(year, month, mag):
+def download_phases(year, month, mag):
     """ Download waveforms for events in the SCEDC Open Data Set that occurred in
     the given year and month and exceed the given magnitude.
     """
@@ -87,7 +87,7 @@ def main():
     parser.add_argument('--month', dest='month', type=int, required=True)
     parser.add_argument('--mag', dest='mag', type=float, default=-2)
     args = parser.parse_args()
-    download_events(args.year, args.month, args.mag)
+    download_phases(args.year, args.month, args.mag)
 
 
 if __name__ == '__main__':
