@@ -68,14 +68,18 @@ def Main():
         #process each line in the input file
         for line in alllines:
             net, sta, loc, chan, start, end = line.split(' ')
-            pds_start = datetime.strptime(start.split('T')[0], '%Y-%m-%d')        
-            pds_end = datetime.strptime(end.split('T')[0], '%Y-%m-%d')
-        
+
+            pds_start = datetime.strptime(start, '%Y-%m-%dT%H:%M:%S.%fZ')
+            pds_end = datetime.strptime(end.strip(), '%Y-%m-%dT%H:%M:%S.%fZ')
+            
+            diff = pds_end - pds_start
+            if diff.days ==1 and diff.seconds == 0:
+                pds_end = pds_start
+
             date = pds_start #initialize loop variable to pds_start
             #process all dates from pds_start to pds_end
             while date <= pds_end:
 
-                date += timedelta(days=1)
                 pds_miniseed = "s3://scedc-pds/continuous_waveforms/%s/%s/" %(date.year, date.strftime("%Y_%j"))
                 ms_file = "{:s}{:_<5}{:s}{:s}_{:s}.ms".format(net, sta, chan, loc.replace('-','_'), date.strftime("%Y%j"))            
                 pds_miniseed += ms_file #download source, pds_miniseed is now s3://scedc-pds/continuous_waveforms/<year>/<year_jjj>/<net><sta><chan><loc>_YYYYJJJ.ms
@@ -87,8 +91,10 @@ def Main():
                 if pds_miniseed not in pds[key]:
                     pds[key].append(pds_miniseed)
                     pds[key].append(ms_file)
-                
-        
+                date += timedelta(days=1)
+
+        print("Starting download from pds...")
+        start = datetime.now()
         fp = open(pds_files,'w') #file containing list of pds files being downloaded, scedc-pds-file.txt
         for key in pds:
             for i in range(0, len(pds[key]), 2):
@@ -103,7 +109,9 @@ def Main():
             
                 subprocess.call(cmd)
         fp.close()
-    
+
+        print("Download complete in ",datetime.now() -start)
+
         #now copy the text file to outdir
         if outdir.find("s3://") != -1:
             cmd = ['aws','s3','cp', pds_files, outdir]
