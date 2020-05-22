@@ -131,7 +131,7 @@ def Main():
 
             start_index += step
             end_index += step
-
+        
     except:
         evalue, etype, etraceback = sys.exc_info()
         traceback.print_exception(evalue, etype, etraceback)
@@ -140,25 +140,31 @@ def Main():
 def DownloadFromPDS(start, end):
     global pds, time2download
 
+    bytes_downloaded = 0
     download_start = datetime.now()
     try:
         for item in pds[start:end]:
 
-            pds_miniseed = item[0]                                                                                                        \
-
+            pds_miniseed = item[0]             
             ms_file = item[1]
             cmd = ['aws','s3','cp', pds_miniseed, ms_file]
             #print (cmd)                                                                                                                   
             subprocess.call(cmd)
+            if os.path.exists(ms_file):
+                 bytes_downloaded += os.stat(ms_file).st_size
+                 
     except:
         evalue, etype, etraceback = sys.exc_info()
         traceback.print_exception(evalue, etype, etraceback)
     
-    time2download = datetime.now() - download_start
-    if time2download.seconds < 60:
-        print ('Time to download per process is ', time2download.seconds, 'seconds')
+    td = datetime.now() - download_start
+    time2download = td.seconds
+    if time2download < 60:
+        print ('Time to download per process is ', time2download, 'seconds')
     else:
-        print ('Time to download per process is ', time2download.seconds/60.0, 'minutes')
+        print ('Time to download per process is ', time2download/60.0, 'minutes')
+    print ("MB downloaded    = ", bytes_downloaded/(1024.0 * 1024.0))
+    print ("Rate of download = ", (bytes_downloaded/(1024.0 * 1024.0))/time2download, " Mbytes/sec")
         
 
 
