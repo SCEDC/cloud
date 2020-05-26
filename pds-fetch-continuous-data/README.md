@@ -1,4 +1,4 @@
-# Example script to download continuous waveform data from SCEDC Public Data Set
+B1;95;0c# Example script to download continuous waveform data from SCEDC Public Data Set
 
 This is an example that shows the user how to download continuous data from the SCEDC PDS by querying the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the example. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket.
 
@@ -53,7 +53,8 @@ optional arguments:
     --infile INFILE  Input file containing requests
     --outdir OUTDIR  Location where downloaded files will be stored. It can be a
 	                 local folder or s3 bucket. Default is directory where the program is located.
-											
+    -t PROCESSES     Number of processes to run the download with. For e.g. -t 2
+                     will divide the requests between 2 processes. Default is 1.
 ```
   
 Example usage  
@@ -61,7 +62,9 @@ Example usage
 ```
 python3 fetch_continuous_data.py --infile avail.txt --outdir /tmp  
 
-python3fetch_continuous_data.py --infile avail.txt --outdir s3://mybucket/myfolder/
+python3 fetch_continuous_data.py -t 8 --infile avail.txt --outdir /tmp  
+
+python3 fetch_continuous_data.py --infile avail.txt --outdir s3://mybucket/myfolder/
 ```
   
 ## Output  
