@@ -149,12 +149,13 @@ def Main():
 
         total = 0
         total_duration = 0
-        qsize = output.qsize()
+        qsize = 0
         
-        for i in range(0, output.qsize()):
+        while not output.empty():
             total += output.get()
             total_duration += output_duration.get()
-    
+            qsize += 1 #we do this instead of using Queue.qsize() as Queue.qsize() is not supported on mac
+
         #using qsize instead of num_processes here as sometimes some processes have no download stats (??) 
         print ("TOTAL bytes downloaded : ", total, \
                "\nAVG time to download per process : ", total_duration/float(qsize), '\n')
