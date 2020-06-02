@@ -25,13 +25,15 @@ import traceback
 import subprocess
 from math import ceil
 from datetime import datetime, timedelta
-from multiprocessing import Process, cpu_count
+from multiprocessing import Process, Queue, cpu_count
 import time
 
-#collect all files to download in this list                                                                                                
-#pds = [[s3_file, local_file, True], [s3_file2, local_file2, True]...[s3_fileN, local_fileN, True]]                                        
+
+#collect all files to download in this list                                                                          
+#pds = [[s3_file, local_file, True], [s3_file2, local_file2, True]...[s3_fileN, local_fileN, True]]          
 pds = []
 time2download = 0
+bytes_downloaded = 0
 
 def Main():
     global pds
@@ -116,57 +118,93 @@ def Main():
         print("Starting download from pds for", len(pds), "requests...")
         step  = ceil(len(pds)/num_processes)
         if len(pds) < num_processes:
-            print("The number of requests (", len(pds),") < number of requested processes (", num_processes,"), using 1 process instead")
-            num_processes = 1
+            print("The number of requests (", len(pds),") < number of requested processes (", num_processes,"), using all available cores (",cpu_count(),") instead")
+            num_processes = cpu_count()
         
         print ("Dividing requests between", num_processes, "process(es)")
         
         start_index = 0
         end_index   = step
-        procs = []
-        
+        procs = []       #store process is here
+        output = Queue() #store per process bytes downloaded
+        output_duration = Queue() #store per process duration to download
+
         for i in range(0, num_processes):
-            p = Process(target=DownloadFromPDS, args=(start_index,end_index))
-            p.start()
+            
+            procs.append(Process(target=DownloadFromPDS, args=(start_index,end_index,output, output_duration)))
+            procs[i].start()
 
             start_index += step
             end_index += step
+        
+        while 1:   
+            alive = 0
+            for proc in procs:
+                if proc.is_alive():
+                    alive+= 1
+            if alive <= num_processes:
+                pass
+            if not alive:
+                break
+
+        total = 0
+        total_duration = 0
+        qsize = output.qsize()
+        
+        for i in range(0, output.qsize()):
+            total += output.get()
+            total_duration += output_duration.get()
+    
+        #using qsize instead of num_processes here as sometimes some processes have no download stats (??) 
+        print ("TOTAL bytes downloaded : ", total, \
+               "\nAVG time to download per process : ", total_duration/float(qsize), '\n')
         
     except:
         evalue, etype, etraceback = sys.exc_info()
         traceback.print_exception(evalue, etype, etraceback)
 
 
-def DownloadFromPDS(start, end):
-    global pds, time2download
+def DownloadFromPDS(start, end, output, output_duration):
+    global pds
 
-    bytes_downloaded = 0
+    bytes_per_process = 0
     download_start = datetime.now()
+
     try:
         for item in pds[start:end]:
 
             pds_miniseed = item[0]             
             ms_file = item[1]
-            cmd = ['aws','s3','cp', pds_miniseed, ms_file]
-            #print (cmd)                                                                                                                   
+            cmd = ['aws','s3','cp', '--quiet', pds_miniseed, ms_file]
+            print ('[', os.getpid(), ']', cmd)
+
             subprocess.call(cmd)
             if os.path.exists(ms_file):
-                 bytes_downloaded += os.stat(ms_file).st_size
-                 
+                 bytes_per_process += os.stat(ms_file).st_size
     except:
         evalue, etype, etraceback = sys.exc_info()
         traceback.print_exception(evalue, etype, etraceback)
     
     td = datetime.now() - download_start
-    time2download = td.seconds
-    if time2download < 60:
-        print ('Time to download per process is ', time2download, 'seconds')
-    else:
-        print ('Time to download per process is ', time2download/60.0, 'minutes')
-    print ("MB downloaded    = ", bytes_downloaded/(1024.0 * 1024.0))
-    print ("Rate of download = ", (bytes_downloaded/(1024.0 * 1024.0))/time2download, " Mbytes/sec")
-        
 
+    time2download = td.seconds
+    if time2download > 0:
+        sys.stdout.flush()
+        
+        if time2download < 60:
+            print ('[',os.getpid(), '] Time to download per process is ', time2download, 'seconds')
+        else:
+            print ('[', os.getpid(), '] Time to download per process is ', time2download/60.0, 'minutes')
+        print ('[',os.getpid(), "] MB downloaded    = ", bytes_per_process/(1024.0 * 1024.0))
+        print ('[',os.getpid(), "] Rate of download = ", (bytes_per_process/(1024.0 * 1024.0))/time2download, " MB/sec")
+        print ("\n")    
+    
+    output.put(bytes_per_process)
+    output_duration.put(time2download)
 
 if __name__ == "__main__":
+    major, minor, micro, releaselevel, serial = sys.version_info
+    if major < 3:
+        print ("\nPython version used is %s.%s.%s. Please use Python 3.6 or higher\n" %(major, minor, micro))
+        sys.exit()
     Main()
