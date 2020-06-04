@@ -1,10 +1,10 @@
-B1;95;0c# Example script to download continuous waveform data from SCEDC Public Data Set
+# Example script to download continuous waveform data from SCEDC Public Data Set
 
 This is an example that shows the user how to download continuous data from the SCEDC PDS by querying the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the example. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket.
 
 ## Prerequisites
   * Your own aws account
-  * Python3
+  * Python >= 3.6 (Currently, tested only on Python 3.6)
   * aws command line client
 
 ## Getting availability information
