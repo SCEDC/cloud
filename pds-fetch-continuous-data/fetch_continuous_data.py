@@ -158,7 +158,7 @@ def Main():
 
         #using qsize instead of num_processes here as sometimes some processes have no download stats (??) 
         print ("TOTAL bytes downloaded : ", total, \
-               "\nAVG time to download per process : ", total_duration/float(qsize), '\n')
+               "\nAVG time to download per process : ", total_duration/float(qsize), 'seconds\n')
         
     except:
         evalue, etype, etraceback = sys.exc_info()
