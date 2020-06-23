@@ -4,7 +4,7 @@ This is an example that shows the user how to download continuous data from the 
 
 ## Prerequisites
   * Your own aws account
-  * Python3
+  * Python >= 3.6 (Currently, tested only on Python 3.6)
   * aws command line client
 
 ## Getting availability information
@@ -53,7 +53,8 @@ optional arguments:
     --infile INFILE  Input file containing requests
     --outdir OUTDIR  Location where downloaded files will be stored. It can be a
 	                 local folder or s3 bucket. Default is directory where the program is located.
-											
+    -t PROCESSES     Number of processes to run the download with. For e.g. -t 2
+                     will divide the requests between 2 processes. Default is 1.
 ```
   
 Example usage  
@@ -61,7 +62,9 @@ Example usage
 ```
 python3 fetch_continuous_data.py --infile avail.txt --outdir /tmp  
 
-python3fetch_continuous_data.py --infile avail.txt --outdir s3://mybucket/myfolder/
+python3 fetch_continuous_data.py -t 8 --infile avail.txt --outdir /tmp  
+
+python3 fetch_continuous_data.py --infile avail.txt --outdir s3://mybucket/myfolder/
 ```
   
 ## Output  
