@@ -157,7 +157,8 @@ def Main():
             qsize += 1 #we do this instead of using Queue.qsize() as Queue.qsize() is not supported on mac
 
         #using qsize instead of num_processes here as sometimes some processes have no download stats (??) 
-        print ("TOTAL bytes downloaded : ", total, \
+        print ("Summary : \n" \
+               "\nTOTAL bytes downloaded : ", total, \
                "\nAVG time to download per process : ", total_duration/float(qsize), 'seconds\n')
         
     except:
