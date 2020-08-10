@@ -97,11 +97,12 @@ def Main():
                 ms_file = "{:s}{:_<5}{:s}{:s}_{:s}.ms".format(net, sta, chan, loc.replace('-','_'), date.strftime("%Y%j"))            
                 pds_miniseed += ms_file #download source, pds_miniseed is now s3://scedc-pds/continuous_waveforms/<year>/<year_jjj>/<net><sta><chan><loc>_YYYYJJJ.ms
                 
-                fp.write(pds_miniseed + '\n')
+                #fp.write(pds_miniseed + '\n')
                 ms_file = os.path.join(outdir, ms_file) #download destination, ms_file is <net><sta><chan><loc>_YYYYJJJ.ms
 
                 if [pds_miniseed, ms_file] not in pds:
                     pds.append([pds_miniseed, ms_file])
+                    fp.write(pds_miniseed + '\n')
                 date += timedelta(days=1)
         
         fp.close()
