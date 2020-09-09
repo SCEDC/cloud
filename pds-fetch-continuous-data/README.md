@@ -1,6 +1,6 @@
 # Script to download continuous waveform data from SCEDC Public Data Set
 
-This is an example that shows the user how to download continuous data from the [SCEDC PDS](https://scedc.caltech.edu/cloud/) using the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the script. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket. 
+This is an example script that shows the user how to download continuous data from the [SCEDC PDS](https://scedc.caltech.edu/cloud/) using the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the script. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket. 
 
 ## Prerequisites
   * Your own aws account
