@@ -53,7 +53,8 @@ def Main():
                                      Downloads are made from s3://scedc-pds/continuous_waveforms/
 
                                      More information regarding the webservice at https://service.scedc.caltech.edu/fdsnws/availability/1/
-
+                                     More information regarding SCEDC public data set at https://scedc.caltech.edu/cloud/
+                                     
                                      Outputs :
                                      1. A folder containing : 
                                         a. Downloaded miniseed files 
