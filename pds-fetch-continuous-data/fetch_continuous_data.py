@@ -54,7 +54,7 @@ def Main():
 
                                      More information regarding the webservice at https://service.scedc.caltech.edu/fdsnws/availability/1/
                                      More information regarding SCEDC public data set at https://scedc.caltech.edu/cloud/
-                                     
+
                                      Outputs :
                                      1. A folder containing : 
                                         a. Downloaded miniseed files 
@@ -62,7 +62,7 @@ def Main():
                                      2. On the console:  A per process as well as comprehensive summary of time taken to download in minutes, megabytes downloaded and rate of download
 
                                      '''))
-    parser.add_argument("--infile", required=True, help="Input file containing requests")
+    parser.add_argument("--infile", required=True, help="Input file containing requests. Required.")
     parser.add_argument("--outdir", default=os.path.dirname(os.path.abspath(__file__)), help="Folder where downloaded files will be stored. It can be a local folder or s3 bucket. Default is directory where the program is located. Also contains a text file listing s3 locations of downloaded files")
     parser.add_argument("-t", dest="processes", type=int, default=1, help="Number of processes to run the download with. For e.g. -t 2 will divide the requests between 2 processes. Default is 1.")
     args = parser.parse_args()
@@ -167,7 +167,7 @@ def Main():
 
         #using qsize instead of num_processes here as sometimes some processes have no download stats (??) 
         print ("Summary : \n" \
-               "\nTOTAL bytes downloaded : ", total, \
+               "\nTOTAL MB downloaded : ", total/(1024.0 * 1024.0), \
                "\nAVG time to download per process : ", total_duration/float(qsize), 'seconds\n')
         
     except:
