@@ -53,9 +53,15 @@ def Main():
                                      Downloads are made from s3://scedc-pds/continuous_waveforms/
 
                                      More information regarding the webservice at https://service.scedc.caltech.edu/fdsnws/availability/1/
+
+                                     Outputs :
+                                     1. Downloaded miniseed files 
+                                     2. A text file containing s3 locations of downloaded files.
+                                     3. A per process as well as comprehensive summary of time taken to download in minutes, megabytes downloaded and rate of download
+
                                      '''))
     parser.add_argument("--infile", required=True, help="Input file containing requests")
-    parser.add_argument("--outdir", default=os.path.dirname(os.path.abspath(__file__)), help="Location where downloaded files will be stored. It can be a local folder or s3 bucket. Default is directory where the program is located.")
+    parser.add_argument("--outdir", default=os.path.dirname(os.path.abspath(__file__)), help="Folder where downloaded files will be stored. It can be a local folder or s3 bucket. Default is directory where the program is located. Also contains a text file listing s3 locations of downloaded files")
     parser.add_argument("-t", dest="processes", type=int, default=1, help="Number of processes to run the download with. For e.g. -t 2 will divide the requests between 2 processes. Default is 1.")
     args = parser.parse_args()
 
