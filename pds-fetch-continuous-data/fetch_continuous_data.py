@@ -55,9 +55,10 @@ def Main():
                                      More information regarding the webservice at https://service.scedc.caltech.edu/fdsnws/availability/1/
 
                                      Outputs :
-                                     1. Downloaded miniseed files 
-                                     2. A text file containing s3 locations of downloaded files.
-                                     3. A per process as well as comprehensive summary of time taken to download in minutes, megabytes downloaded and rate of download
+                                     1. A folder containing : 
+                                        a. Downloaded miniseed files 
+                                        b. A text file containing s3 locations of downloaded files.
+                                     2. On the console:  A per process as well as comprehensive summary of time taken to download in minutes, megabytes downloaded and rate of download
 
                                      '''))
     parser.add_argument("--infile", required=True, help="Input file containing requests")
