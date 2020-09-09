@@ -9,7 +9,7 @@ This is an example that shows the user how to download continuous data from the 
 
 ## Getting availability information
 
-Use the FDSN availability web service query endpoint to get information about data availability. For more information and help, please see https://service.scedc.caltech.edu/fdsnws/availability/1/
+Use the FDSN availability web service **query** endpoint to get information about data availability. For more information and help, please see https://service.scedc.caltech.edu/fdsnws/availability/1/
 
 The example below retrieves all CI stations that start with the letter B and have BHZ channel data between 2019-03-04 and 2019-03-05. format=request produces output in HTTP POST format.  
 
