@@ -2,6 +2,8 @@
 
 This is an example script that shows the user how to download continuous data from the [SCEDC PDS](https://scedc.caltech.edu/cloud/) using the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the script. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket. 
 
+The continuous miniseed files in PDS are day long files. The entire day long file is downloaded even if only a part of day is requested.
+
 ## Prerequisites
   * Your own aws account
   * Python >= 3.6 (Currently, tested only on Python 3.6)
