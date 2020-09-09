@@ -59,7 +59,7 @@ def Main():
 
                                      Outputs :
                                      1. A folder containing : 
-                                        a. Downloaded miniseed files 
+                                        a. Downloaded miniseed files (granularity is a day)
                                         b. A text file containing s3 locations of downloaded files.
                                      2. On the console:  A per process as well as comprehensive summary of time taken to download in minutes, megabytes downloaded and rate of download
 
