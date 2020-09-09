@@ -1,6 +1,6 @@
-# Example script to download continuous waveform data from SCEDC Public Data Set
+# Script to download continuous waveform data from SCEDC Public Data Set
 
-This is an example that shows the user how to download continuous data from the SCEDC PDS by querying the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the example. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket.
+This is an example that shows the user how to download continuous data from the [SCEDC PDS](https://scedc.caltech.edu/cloud/) using the SCEDC's FDSN availability web service. The web service has an option to produce output for making POST requests. This is used as the input to the script. The output is a set of miniseed files and a text file listing the PDS location of all downloaded files. The location to download can be a local directory or an s3 bucket. 
 
 ## Prerequisites
   * Your own aws account
@@ -9,9 +9,9 @@ This is an example that shows the user how to download continuous data from the 
 
 ## Getting availability information
 
-Use the FDSN availability web service **query** endpoint to get information about data availability. For more information and help, please see https://service.scedc.caltech.edu/fdsnws/availability/1/
+Use the FDSN availability web service **query** endpoint to get information about data availability. **format=request** produces output in HTTP POST format. For more information and help, please see https://service.scedc.caltech.edu/fdsnws/availability/1/
 
-The example below retrieves all CI stations that start with the letter B and have BHZ channel data between 2019-03-04 and 2019-03-05. format=request produces output in HTTP POST format.  
+The example below retrieves all CI stations that start with the letter B and have BHZ channel data between 2019-03-04 and 2019-03-05.  
 
 ``
 wget -O avail.txt "https://service.scedc.caltech.edu/fdsnws/availability/1/query?net=CI&sta=B*&cha=BHZ&loc=--&start=2019-03-04T00:00:00&end=2019-03-05T00:00:00&format=request&nodata=404"
@@ -48,6 +48,7 @@ Then, use avail.out as input to this program using --infile
 Downloads are made from s3://scedc-pds/continuous_waveforms/
 
 More information regarding the webservice at https://service.scedc.caltech.edu/fdsnws/availability/1/
+More information regarding SCEDC public data set at https://scedc.caltech.edu/cloud/
 
 1. A folder containing : 
    a. Downloaded miniseed files 
