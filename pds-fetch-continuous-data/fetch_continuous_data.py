@@ -45,9 +45,11 @@ def Main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=textwrap.dedent('''\
                                      Fetch continuous miniseed data from s3://scedc-pds using SCEDC FDSN availability web service as input.
-                                     The SCEDC FDSN availability web service's query end point with format=request may be used to generate the input to this program.
-                                     For e.g.
+                                     The SCEDC FDSN availability web service's query end point with format=request may be used to generate the input to this program. 
+                                     For e.g. get availability information for BHZ channels for stations beginning with B for the CI network
+                                     
                                      wget -O avail.out "https://service.scedc.caltech.edu/fdsnws/availability/1/query?net=CI&sta=B*&cha=BHZ&loc=--&start=2019-03-04T00:00:00&end=2019-03-05T00:00:00&format=request&nodata=404"
+                                     
                                      Then, use avail.out as input to this program using --infile
 
                                      Downloads are made from s3://scedc-pds/continuous_waveforms/
