@@ -2,7 +2,7 @@ FROM amazonlinux:2018.03
 RUN yum update -y
 RUN yum groupinstall "Development Tools" -y
 RUN yum install -y \
-   gcc \
+    gcc \
     bzip2-devel \
     libffi \
     openssl-devel \
@@ -13,6 +13,21 @@ RUN yum install -y \
     libffi-devel \
     libcffi-devel \
     wget \
+    atlas-devel \
+    atlas-sse3-devel \
+    blas-devel \
+    freetype-devel \
+    libpng-devel \
+    gcc-c++ \
+    gcc72-c++ \
+    gcc-gfortran \
+    lapack-devel \
+    libjpeg-turbo \
+    libjpeg-turbo-devel \
+    findutils \
+    zip \
+    tar
+
 
 
 RUN cd /usr/src/ && \
