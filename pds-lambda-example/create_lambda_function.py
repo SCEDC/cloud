@@ -7,8 +7,10 @@
 
 import boto3
 
+from settings import *
+
 # Auth to create a Lambda function (credentials are picked up from above .aws/credentials)
-session = boto3.Session(profile_name='schen-gps')
+session = boto3.Session(profile_name=AWS_PROFILE)
 
 # Make sure Lambda is running in the same region as the HST public dataset
 client = session.client('lambda', region_name=AWS_REGION)
@@ -17,6 +19,7 @@ client = session.client('lambda', region_name=AWS_REGION)
 # Role is created here: https://console.aws.amazon.com/iam/home?region=us-east-1#/home
 # The Role needs to have the AWSLambdaFullAccess permission policies attached
 # 'your-s3-bucket' is the S3 bucket you've uploaded the `venv.zip` file to
+print('Creating lambda function')
 response = client.create_function(
     FunctionName=LAMBDA_FUNCTION,
     Runtime='python3.7',
@@ -31,3 +34,4 @@ response = client.create_function(
     MemorySize=1024,
     Publish=True
 )
+print('Lambda function created')
