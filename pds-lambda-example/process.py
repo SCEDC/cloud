@@ -21,9 +21,12 @@ def decimate(infile, outfile, dec_factor):
     :param outfile: Name of the output file
     :param dec_factor: Decimation factor
     """
+    
+    print('Reading', infile)
     st = obspy.read(infile)
     #st_new = Stream()
     # Decimate each trace in the stream.
+    print('Decimating traces')
     for tr in st:
         tr.decimate(factor=dec_factor, strict_length=False, no_filter=True)
         #st_new.append(tr)
@@ -44,7 +47,7 @@ def process(event):
     bkt_in_name = event['s3_input_bucket']
     dec_factor = event['decimation_factor']
     print('input bucket:{} output bucket:{} decimation:{}'.format(bkt_in_name, bkt_out_name, dec_factor))
-    (year, year_day, filename) = key.split('/')
+    (wf_dir, year, year_day, filename) = key.split('/')
     (fn, ext) = os.path.splitext(filename)
 
     session = boto3.Session()
@@ -58,6 +61,7 @@ def process(event):
     if not os.path.isfile(infile):
         raise Exception('Could not download {} from {} to {}'.format(key, bkt_in_name, infile))
 
+    print('Calling decimate')
     decimate(infile, outfile, dec_factor)
 
     if not os.path.isfile(outfile):
