@@ -3,9 +3,18 @@
 # Generate key listing for seismograms in the SCEDC Open Data Set 
 # given year, day range, and SEED channel.
 
-year=2016
-for d in {1..31}; do
+if [[ "$#" -lt 3 ]]; then
+  echo "usage: $0 <year> <start_day> <end_day> <channel>"
+  exit
+fi
+
+year=$1
+start_day=$2
+end_day=$3
+channel=$4
+
+for d in $(seq $start_day $end_day); do
   prefix=$(printf "%d/%d_%03d" $year $year $d)
-  aws s3 ls s3://scedc-pds/${prefix} --recursive | awk '{print $4}' | grep _BH
+  aws s3 ls s3://scedc-pds/continuous_waveforms/${prefix} --recursive | awk '{print $4}' | grep "_$channel"
 done
   
