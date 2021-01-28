@@ -12,6 +12,15 @@ from settings import *
 # Auth to create a Lambda function (credentials are picked up from above .aws/credentials)
 session = boto3.Session(profile_name=AWS_PROFILE)
 
+# Upload venv.
+print('Uploading venv.zip')
+s3_client = session.client('s3')
+s3_client.put_object(Key='venv.zip', \
+                     Bucket=LAMBDA_BUCKET, \
+                     Body=open('venv.zip', 'rb') \
+                    )
+print('Upload complete')
+
 # Make sure Lambda is running in the same region as the HST public dataset
 client = session.client('lambda', region_name=AWS_REGION)
 
