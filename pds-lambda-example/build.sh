@@ -1,53 +1,56 @@
 #!/bin/bash
 set -ex
 
-yum update -y
-yum install -y \
-    atlas-devel \
-    atlas-sse3-devel \
-    blas-devel \
-    freetype-devel \
-    libpng-devel \
-    gcc \
-    gcc-c++ \
-    gcc72-c++ \
-    gcc-gfortran \
-    lapack-devel \
-    findutils \
-    zip \
-    tar
+# This build script creates a zip file, venv.zip, containing a Lambda function
+# and a Python virtual environment with ObsPy installed.
+
+# Yum installations have been moved to Dockerfile.
+#yum update -y
+#yum install -y \
+#    atlas-devel \
+#    atlas-sse3-devel \
+#    blas-devel \
+#    freetype-devel \
+#    libpng-devel \
+#    gcc \
+#    gcc-c++ \
+#    gcc72-c++ \
+#    gcc-gfortran \
+#    lapack-devel \
+#    libjpeg-turbo \
+#    libjpeg-turbo-devel \
+#    findutils \
+#    zip \
+#    tar
 
 PYTHON=python3.7
 
 do_pip () {
   pip install --upgrade pip wheel
-  #pip install --no-binary :all: numpy requests obspy
-  pip install --no-binary :all: numpy 
-  pip install --no-binary :all: scipy
-  #pip install --no-binary requests requests
-  #pip install --no-binary decorator decorator
-  pip install --no-binary :all: obspy
-  test -f /outputs/requirements.txt && pip install -r /outputs/requirements.txt
+  pip install --no-binary :all: numpy==1.19.5
+  pip install --no-binary :all: scipy==1.6.0
+  pip install --no-binary :all: obspy==1.2.2
+  #test -f /outputs/requirements.txt && pip install -r /outputs/requirements.txt
 }
 
 strip_virtualenv () {
-    # Clean up docs
-    find $VIRTUAL_ENV -name "*.dist-info" -type d -prune -exec rm -rf {} \;
-    echo "venv stripped size $(du -sh $VIRTUAL_ENV | cut -f1)"
+    # Without dist-info, obspy.read() complains that a miniSEED file
+    # is in an unknown format, so don't delete dist-info. The resulting zip
+    # file is actually smaller. 
+    #find $VIRTUAL_ENV -name "*.dist-info" -type d -prune -exec rm -rf {} \;
+    #echo "venv stripped size $(du -sh $VIRTUAL_ENV | cut -f1)"
 
-    # TODO: It breaks astropy if you remove its 'tests' folder. Figure out
-    # how to gracefully skip this directory (my bash-foo) isn't up to it.
-
-    tar -cvf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy.tar" "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy"
-    rm -rf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy"
+    # ObsPy does not need to be moved before removing "tests".
+    #tar -cvf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy.tar" "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy"
+    #rm -rf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy"
 
     # Clean up tests
     find $VIRTUAL_ENV -name "tests" -type d -prune -exec rm -rf {} \;
     echo "venv stripped size $(du -sh $VIRTUAL_ENV | cut -f1)"
 
-    tar -xvf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy.tar"
-    rm -rf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy.tar"
-
+    #tar -xvf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy.tar"
+    #rm -rf "$VIRTUAL_ENV/lib64/python3.7/site-packages/obspy.tar"
+    
     echo "venv original size $(du -sh $VIRTUAL_ENV | cut -f1)"
     find $VIRTUAL_ENV/lib64/python3.7/site-packages/ -name "*.so" | xargs strip
     echo "venv stripped size $(du -sh $VIRTUAL_ENV | cut -f1)"
