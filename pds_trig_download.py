@@ -19,7 +19,7 @@ def get_prefix(event_time):
     """ Creates the Open Data Set prefix for an event given the origin time
     as a Pandas timestamp.
     """
-    return 'event_waveforms/{}/{}_{}/'.format(event_time.year, event_time.year, event_time.dayofyear)
+    return 'event_waveforms/{}/{}_{:03d}/'.format(event_time.year, event_time.year, event_time.dayofyear)
 
 
 def get_events(year, month, mag):
