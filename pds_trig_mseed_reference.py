@@ -1,4 +1,4 @@
-!/usr/bin/env python3
+#!/usr/bin/env python3
 
 """
 The mseed_referencer class acquires a list of mseed files for event waveforms. 
