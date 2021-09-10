@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Upload lambda zip file and reload lambda function.
 
