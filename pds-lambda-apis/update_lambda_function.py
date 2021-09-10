@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+
+"""
+Upload lambda zip file and reload lambda function.
+
+author: Shang-Lin Chen
+
+"""
+
 # In this example, we have a file named `credentials` in a `.aws` directory.
 # e.g.:
 # $ cat ~/.aws/credentials
@@ -6,7 +15,6 @@
 # aws_secret_access_key = EXAMPLESECRETACCESSKEY
 
 import boto3
-
 from settings import *
 
 # Auth to create a Lambda function (credentials are picked up from above .aws/credentials)
@@ -24,24 +32,11 @@ print('Upload complete')
 # Make sure Lambda is running in the same region as the HST public dataset
 client = session.client('lambda', region_name=AWS_REGION)
 
-# Use boto to create a Lambda function.
-# Role is created here: https://console.aws.amazon.com/iam/home?region=us-east-1#/home
-# The Role needs to have the AWSLambdaFullAccess permission policies attached
-# 'your-s3-bucket' is the S3 bucket you've uploaded the `venv.zip` file to
-print('Creating lambda function')
-print(IAM_ROLE)
-response = client.create_function(
+# Update the lambda function's code with a new version of venv.zip.
+print('Updating lambda function')
+response = client.update_function_code(
     FunctionName=LAMBDA_FUNCTION,
-    Runtime='python3.7',
-    Role=IAM_ROLE, # <- Update this with your IAM role name
-    Handler='process.handler',
-    Code={
-        'S3Bucket': LAMBDA_BUCKET, # <- this is the bucket which holds your venv.zip file
-        'S3Key': VENV_FILE
-    },
-    Description=LAMBDA_DESCRIPTION,
-    Timeout=300,
-    MemorySize=1024,
+    S3Bucket=LAMBDA_BUCKET, # <- this is the bucket which holds your venv.zip file
+    S3Key=VENV_FILE,
     Publish=True
 )
-print('Lambda function created')
