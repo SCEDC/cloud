@@ -2,7 +2,14 @@
 
 This directory contains code and instructions for creating ObsPy-based
 Lambda functions compatible with Amazon API Gateway that use the SCEDC 
-Public Dataset.
+Public Dataset. 
+
+Amazon API Gateway places a RESTful interface in front of a Lambda function.
+This means you can connect to a web URL to call your Lambda function, using
+tools such as curl or any library that can send HTTP requests. Using API 
+Gateway also allows your Lambda function to stream data, but note that streaming
+data to the Internet incurs data transfer charges. Having your Lambda function
+write to S3 instead of stream data remains an option.
 
 
 ## Prerequisites
@@ -17,11 +24,13 @@ Public Dataset.
 
 In your AWS account:
 
-1. Create an IAM role that has full AmazonS3FullAccess, AWSLambda_FullAccess, and AWSLambdaBasicExecutionRole permissions at https://console.aws.amazon.com/iam/home#/roles.
+1. Create an IAM role that has full AmazonS3FullAccess, AWSLambda_FullAccess, and AWSLambdaBasicExecutionRole permissions at https://console.aws.amazon.com/iam/home#/roles. 
 
-2. Create two S3 buckets in the US-West-2 region at https://s3.console.aws.amazon.com/s3/home. One of these buckets will hold the zip file for creating the Lambda function, and the other will hold processed data returned by the APIs. The US-West-2 region is necessary because the SCEDC Open Data Set is located in US-West-2.
+2. Create an S3 bucket for holding the zip file your Lambda function will use.
 
-On your computer, your access keys in `.aws/credentials` should have full AmazonS3FullAccess and AWSLambda_FullAccess permissions. Go to https://console.aws.amazon.com/iam/home#/users to create or modify
+3. Create an S3 bucket for data returned by the Lambda function/API. Some functions also have the option of streaming data directly to your computer.
+
+4. On your computer, your access keys in `.aws/credentials` should have full AmazonS3FullAccess and AWSLambda_FullAccess permissions. Go to https://console.aws.amazon.com/iam/home#/users to create or modify
 access keys.
 
 ## Creating a Lambda Function
@@ -67,6 +76,7 @@ specified in `LAMBDA_BUCKET` in `settings.py` and creates the Lambda function.
 
 ## Creating an API
 
+In your AWS web console, click on "Services" and select Amazon API Gateway.
 
 ## Creating Another Function and API
 
