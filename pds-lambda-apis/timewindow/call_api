@@ -1,0 +1,4 @@
+#curl -X POST -H "Accept: application/octet-stream" -H "Content-Type: application/json" -d @request.json https://bjn9lwymo7.execute-api.us-west-2.amazonaws.com/request
+curl -X POST -H "Content-Type: application/json" -d @request.json https://bjn9lwymo7.execute-api.us-west-2.amazonaws.com/request \
+  -o outfile
+
