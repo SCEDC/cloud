@@ -1,8 +1,11 @@
+# Creating Lambda Functions and APIs
+
 This directory contains code and instructions for creating ObsPy-based
-Lambda functions compatible with Amazon API Gateway.
+Lambda functions compatible with Amazon API Gateway that use the SCEDC 
+Public Dataset.
 
 
-**Prerequisites**
+## Prerequisites
 
 - Your own AWS account
 - [Docker](https://docker.com)
@@ -10,20 +13,18 @@ Lambda functions compatible with Amazon API Gateway.
 - [`boto3`](https://aws.amazon.com/sdk-for-python/) 
 - [`awscli`](https://aws.amazon.com/cli/)
 
-**Setup**
+## Setup
 
 In your AWS account:
 
 1. Create an IAM role that has full AmazonS3FullAccess, AWSLambda_FullAccess, and AWSLambdaBasicExecutionRole permissions at https://console.aws.amazon.com/iam/home#/roles.
 
-2. Create two S3 buckets in the US-West-2 region at https://s3.console.aws.amazon.com/s3/home. One of these buckets will
-hold the zip file for creating the Lambda function, and the other will hold the
-decimated data. The US-West-2 region is necessary because the SCEDC Open Data Set is located in US-West-2.
+2. Create two S3 buckets in the US-West-2 region at https://s3.console.aws.amazon.com/s3/home. One of these buckets will hold the zip file for creating the Lambda function, and the other will hold processed data returned by the APIs. The US-West-2 region is necessary because the SCEDC Open Data Set is located in US-West-2.
 
 On your computer, your access keys in `.aws/credentials` should have full AmazonS3FullAccess and AWSLambda_FullAccess permissions. Go to https://console.aws.amazon.com/iam/home#/users to create or modify
 access keys.
 
-**Creating a Lambda Function**
+## Creating a Lambda Function
 
 1. Clone the git repo and navigate to this directory.
 
@@ -48,7 +49,7 @@ from that function's directory into this directory. For example, to build the
 
 4. Copy `settings_example.py` to `settings.py`, and modify the fields to fit your account. 
  
-5. Create the zip file, `venv.zip`, that will be used to create the Lambda function:
+5. Create the zip file that will be used to create the Lambda function:
 ```
 docker run -v $(pwd):/outputs lambda-env /bin/bash /outputs/build.sh
 ```
@@ -64,9 +65,10 @@ specified in `LAMBDA_BUCKET` in `settings.py` and creates the Lambda function.
   python3 create_lambda_function.py
   ```
 
-# Creating an API
+## Creating an API
 
-# Creating Another API
+
+## Creating Another Function and API
 
 1. Write a handler for your Lambda function in `process.py`, or copy an existing
 `process.py` from one of the example directories.
