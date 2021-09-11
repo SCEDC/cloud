@@ -112,7 +112,12 @@ def process(event, upload=True):
         print(event)
     
     nscl = event['nscl']
-    bkt_out_name = event['s3_output_bucket']
+
+    if 's3_output_bucket' in event:
+        bkt_out_name = event['s3_output_bucket']
+    else:
+        upload = False
+
     bkt_in_name = event['s3_input_bucket']
     
     start_time, end_time = get_time_window(event)
