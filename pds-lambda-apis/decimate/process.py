@@ -8,9 +8,11 @@ author: Shang-Lin Chen
 
 import os
 import boto3
+import json
 import obspy
 from obspy.core.stream import Stream
 
+api_gateway = False
 
 def decimate(infile, outfile, dec_factor):
     """
@@ -41,6 +43,13 @@ def process(event):
     :param event: Input parameters to Lambda
     """
 
+    global api_gateway
+
+    print(event)
+    if 'routeKey' in event:
+        api_gateway = True
+        event = json.loads(event['body'])
+
     key = event['s3_key']
     print('Processing {}'.format(key))
     bkt_out_name = event['s3_output_bucket']
@@ -68,12 +77,26 @@ def process(event):
         raise Exception('Could not write output file {}'.format(outfile))
 
     print('Uploading {} to {}'.format(outfile, bkt_out_name))
+    output_key = 'decimated/{}/{}/{}.ms'.format(year, year_day, fn)
     s3.upload_file(outfile, bkt_out_name, 'decimated/{}/{}/{}.ms'.format(year, year_day, fn))
     os.remove(outfile)
     os.remove(infile)
 
+    return { 'output_key': 's3://{}/{}'.format(bkt_out_name, output_key) }
+    
 
 def handler(event, context):
     """ Lambda function handler.
     """
-    process(event)
+    
+    response =  process(event)
+    print(response)
+
+    if api_gateway:
+        return {
+            'statusCode': 200,
+            'body': json.dumps(response),
+        }
+    else:
+        return response
+
