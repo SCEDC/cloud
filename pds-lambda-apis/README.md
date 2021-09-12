@@ -20,7 +20,7 @@ write to S3 instead of stream data remains an option.
 - [`boto3`](https://aws.amazon.com/sdk-for-python/) 
 - [`awscli`](https://aws.amazon.com/cli/)
 
-## Setup
+## AWS Account Setup
 
 In your AWS account:
 
@@ -50,7 +50,7 @@ access keys.
 This image runs Amazon Linux 2018.03 and has Python 3.7 and ObsPy installed.
 
 3. This directory contains three sample functions. Copy the file `process.py` 
-from that function's directory into this directory. For example, to build the
+from a function's directory into this directory. For example, to build the
 `timewindow` function:
   ```
   cp timewindow/process.py .
@@ -76,7 +76,28 @@ specified in `LAMBDA_BUCKET` in `settings.py` and creates the Lambda function.
 
 ## Creating an API
 
-In your AWS web console, click on "Services" and select Amazon API Gateway.
+1. In your AWS web console, click on "Services" and select API Gateway.
+
+2. Click "Create API."
+
+3. Choose HTTP API and click the "Build" button.
+
+4. Click "Add Integration" and select "Lambda" in the dropdown. For AWS Region, select "us-west-2. Enter the name of your Lambda function.
+
+5. Enter a name for your API in the "API name" box. Then click "Next."
+
+6. On the "Configure routes" page, you can leave "ANY" as the method or choose POST. The example functions in this directory only support the POST method. 
+
+7. Make up a name for the resource path that starts with "/". This will be the path at the end of the URL for your API. For example, your API's URL could be `https://api-url.amazon.com/myresourcepath`. 
+
+8. The name of the Lambda function should be the integration target. Click "Nexto" and click "Next" on the "Configure stages" page.
+
+9. Check over the next page and click "Create."
+
+## Accessing the API
+
+API Gateway generates an address for the API. Append the resource path to the address, and use this URL to access your function.
+You can use tools like curl or libraries like Python's `requests` library.
 
 ## Creating Another Function and API
 
@@ -98,4 +119,9 @@ In your AWS web console, click on "Services" and select Amazon API Gateway.
   ```
 
 5. Create an API using API Gateway as in the "Creating an API" section.
+
+## References
+
+[API Gateway](https://aws.amazon.com/api-gateway/)  
+[AWS Lambda](https://aws.amazon.com/lambda/)  
 
