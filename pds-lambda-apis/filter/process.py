@@ -19,6 +19,7 @@ formats = {
     'MSEED': 'ms',
 }
 
+api_gateway = False
 
 def filter_waveforms(nscls, infile, fmt):
     st = obspy.read(infile)
@@ -70,17 +71,15 @@ def process(event, upload=True):
     :param event: Input parameters to Lambda
     """
 
+    global api_gateway
     print(event)
-    api_gateway = False
 
     # If the request came from API Gateway, the fields we want are in the 'body'
     # key.
     if 'routeKey' in event:
         api_gateway = True
-        print('API Gateway')
         event = json.loads(event['body'])
-        print(event)
-    
+        
     if 'nscls' in event:
         nscls = event['nscls']
     else:
@@ -124,15 +123,23 @@ def process(event, upload=True):
             # Get the name of the filename that will be used in S3.
             s3_filename = os.path.basename(outfile)
             output_key = 'filtered/{}/{}'.format(event['evid'], s3_filename)
-            output_keys.append(output_key)
+            output_keys.append('s3://{}/{}'.format(bkt_out_name, output_key))
             s3.upload_file(outfile, bkt_out_name, output_key)
             os.remove(outfile)
 
-    return { 'output_keys': json.dumps(output_keys) }
+    return { 'output_keys': output_keys }
 
 
 def handler(event, context):
     """ Lambda function handler.
     """
-    return process(event)
+   
+    response = process(event)
     
+    if api_gateway:
+        return {
+            "statusCode": 200,
+            "body": json.dumps(response)
+        }
+    else:
+        return response
