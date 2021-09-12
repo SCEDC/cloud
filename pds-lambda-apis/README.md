@@ -8,9 +8,22 @@ Amazon API Gateway places a RESTful interface in front of a Lambda function.
 This means you can connect to a web URL to call your Lambda function, using
 tools such as curl or any library that can send HTTP requests. Using API 
 Gateway also allows your Lambda function to stream data, but note that streaming
-data to the Internet incurs data transfer charges. Having your Lambda function
-write to S3 instead of stream data remains an option.
+data to the Internet incurs data transfer charges. 
 
+## Example Lambda Functions
+
+`timewindow` - Given a time window and NSCL, returns a windowed waveform from the 
+Public Dataset in SAC or miniSEED format. The resulting waveform can be streamed 
+to the user or written to S3.
+
+`filter` - Given an event ID, a list of NSCLs, and an output format, this function 
+applies a lowpass filter to the triggered waveforms in the Public Dataset that match 
+the event ID and each NSCL. The results are written to S3 in the output format.
+
+`decimate` - Given the key of a continuous waveform from the Public Dataset and a
+decimation factor, this function decimates the waveform and saves the result to an 
+S3 bucket. This function is the API Gateway-compatible version of the older example in
+`pds-lambda-example`.
 
 ## Prerequisites
 
